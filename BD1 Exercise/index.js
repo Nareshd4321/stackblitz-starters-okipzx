@@ -22,7 +22,7 @@ app.get('/cart-total', (req, res) => {
 
 // Apply a discount based on membership status
 
-app.get('/membership-discount', (req, res) => {
+app.get('/membershipdiscount', (req, res) => {
   let cartTotal = parseFloat(req.query.cartTotal);
   let isMember = req.query.isMember === 'true';
   let result;
@@ -31,7 +31,7 @@ app.get('/membership-discount', (req, res) => {
   } else if (isMember) {
     let total =  cartTotal - (cartTotal*10)/100 ;
     result = '10% discount applied and amount after discount is ' + total.toString();
-  } else {'Not a member no discount applied';}
+  } else {result ='Not a member no discount applied';}
   res.send(result);
 });
 
