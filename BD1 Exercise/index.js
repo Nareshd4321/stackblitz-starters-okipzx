@@ -1,10 +1,10 @@
 const express = require('express');
 const { resolve } = require('path');
-
 const app = express();
 const port = 3000;
+const cors = require('cors');
 app.use(express.static('static'));
-
+app.use(cors());
 
 // Calculate the total price of items in the cart
 app.get('/cart-total', (req, res) => {
@@ -22,7 +22,7 @@ app.get('/cart-total', (req, res) => {
 
 // Apply a discount based on membership status
 
-app.get('/membershipdiscount', (req, res) => {
+app.get('/membership-discount', (req, res) => {
   let cartTotal = parseFloat(req.query.cartTotal);
   let isMember = req.query.isMember === 'true';
   let result;
@@ -30,7 +30,7 @@ app.get('/membershipdiscount', (req, res) => {
     result = 'Enter proper cart total (cannot be negative)';
   } else if (isMember) {
     let total =  cartTotal - (cartTotal*10)/100 ;
-    result = '10% discount applied and amount after discount is ' + total.toString();
+    result = total.toString();
   } else {result ='Not a member no discount applied';}
   res.send(result);
 });
@@ -55,11 +55,12 @@ app.get('/estimate-delivery', (req, res) => {
   let result;
   if (distance < 0) {
     result = 'Enter valid distance (cannot be negative)';
-  } else if (shippingMethod = 'Standard') {
-    let total = (distance)/50;
+  }  else if (shippingMethod = 'express') {
+    let total = (distance)/100;
     result = total.toString();
-  } else if (shippingMethod = 'Express') {
-    let total = distance/100;
+  }
+    else if (shippingMethod = 'Standard') {
+    let total = (distance)/50;
     result = total.toString();
   }
   res.send(result);
@@ -80,7 +81,7 @@ app.get('/shipping-cost', (req, res) => {
 });
 
 // Calculate loyalty points earned from a purchase
-app.get('/shipping-cost', (req, res) => {
+app.get('/loyalty-points', (req, res) => {
   let purchaseAmount   = parseFloat(req.query.purchaseAmount);
   let result;
   if (purchaseAmount < 0) {
